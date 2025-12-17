@@ -1753,11 +1753,1075 @@ In Part 3, choose one real attack, research it, and create a presentation.
    **Type your answers here.**
 
 ---
+# 16.3 Network Attack Mitigation
 
-## What’s next
-Continue with **16.3 Network Attack Mitigations**, starting at:
-- 16.3.1 The Defense-in-Depth Approach
-- 16.3.2 Keep Backups
-- 16.3.3 Upgrade, Update, and Patch
+## 16.3.1 The Defense-in-Depth Approach
+To reduce the risk of network attacks, you first secure the infrastructure devices (routers, switches, servers, and hosts). Most organizations use a **defense-in-depth** (layered) security model, where multiple security devices and services work together to protect users and assets from TCP/IP threats.
+
+In a layered design, devices are also **hardened** (secured) to prevent threat actors from accessing or tampering with them.
+
+**Example security components in a layered network:**
+- **VPN** — Provides secure remote access and site-to-site connections using encrypted tunnels.
+- **ASA Firewall** — A dedicated stateful firewall that allows inside users to initiate connections out (and receive the returning traffic), while blocking unsolicited inbound connections from the outside.
+- **IPS (Intrusion Prevention System)** — Inspects inbound/outbound traffic for malware, attack signatures, and other threats; can stop recognized threats immediately.
+- **ESA/WSA** — Email Security Appliance filters spam/suspicious email; Web Security Appliance filters known/suspicious internet malware sites.
+- **AAA Server** — Stores who is authorized to access/manage network devices; network devices authenticate administrative users against this database.
+
+---
+
+## 16.3.2 Keep Backups
+Backing up device configurations and data is one of the best protections against **data loss**. A backup is a copy stored on removable media or another system so you can restore data/configurations after failures (including hardware failure). Infrastructure devices should have backups of configuration files and IOS images (e.g., on an FTP or similar server). Backups are typically stored **offsite** to protect them if something happens to the main location. Windows hosts also include backup/restore tools, and users should back up to another drive or to cloud storage.
+
+### Backup considerations
+
+| Consideration | Description |
+|---|---|
+| **Frequency** | - Perform backups regularly as defined by the security policy.  
+- Full backups take time, so do monthly/weekly full backups plus frequent partial backups of changed files. |
+| **Validation** | - Always validate backups to confirm data integrity and verify restore procedures. |
+| **Storage** | - Move backups to an approved **offsite** location on a daily/weekly/monthly rotation as required by policy. |
+| **Security** | - Protect backups with strong passwords (needed to restore the data). |
+
+---
+
+## 16.3.3 Upgrade, Update, and Patch
+Staying current with security updates improves your defense as new malware and vulnerabilities appear. A very effective way to reduce worm/malware impact is to:
+- Download security updates from OS/application vendors
+- Patch all vulnerable systems
+
+In organizations, admins often maintain a **standard software image** (OS + approved apps) for new or upgraded systems. Requirements change, so already-deployed systems must also receive updated patches.
+
+A common approach is enabling **automatic updates** so endpoints download and install security patches without user intervention (example shown with Windows Update).
+
+---
+
+## 16.3.4 Authentication, Authorization, and Accounting
+Network devices should be configured so only authorized individuals can access them. **AAA** (“triple A”) is the main framework for controlling administrative access:
+
+- **Authentication** — *Who are you?*
+- **Authorization** — *What are you allowed to do? / What limits apply?*
+- **Accounting** — *What did you do while you were in the system?* (logging/records)
+
+A simple analogy is a credit card:
+- Authentication = identifies the cardholder  
+- Authorization = spending limit/permissions  
+- Accounting = statement showing what was spent, where, and when  
+
+---
+
+## 16.3.5 Firewalls
+A **firewall** is one of the most effective tools for stopping external threats. It sits between networks and controls traffic between them to help prevent unauthorized access.
+
+Core behavior:
+- Inside users can typically initiate connections to the internet and receive return traffic.
+- Unsolicited traffic initiated from the outside is denied access to inside resources.
+
+A firewall can also allow controlled access to specific services hosted for external users. Those public-facing servers are often placed in a **DMZ (demilitarized zone)**, allowing tighter, separate security policies for that segment.
+
+---
+
+## 16.3.6 Types of Firewalls
+Common firewall techniques include:
+- **Packet filtering** — Allow/deny traffic based on IP or MAC addresses.
+- **Application filtering** — Allow/deny based on application type (often using port numbers).
+- **URL filtering** — Allow/deny access to websites using specific URLs or keywords.
+- **Stateful Packet Inspection (SPI)** — Ensures inbound traffic is part of legitimate responses to internal requests; can also recognize/filter certain attack types (e.g., DoS-related patterns).
+
+---
+
+## 16.3.7 Endpoint Security
+An **endpoint (host)** is a device that acts as a network client (laptops, desktops, servers, smartphones, tablets). Endpoint security is challenging because it heavily depends on user behavior.
+
+Good endpoint security requires:
+- Clear, well-documented security policies
+- Employee/user training on safe network usage
+- Protective tools such as antivirus and host intrusion prevention
+- More complete endpoint security often relies on **network access control** solutions
+
+---
+
+## 16.3.8 Check Your Understanding — Network Attack Mitigation
+
+### Question 1
+**Which device controls traffic between two or more networks to help prevent unauthorized access?**
+
+- AAA Server  
+- **Firewall** ✅  
+- IPS  
+- ESA/WSA  
+
+### Question 2
+**Which device is used by other network devices to authenticate and authorize management access?**
+
+- IPS  
+- Firewall  
+- **AAA Server** ✅  
+- ESA/WSA  
 
 
+# Module 16 — Network Security Fundamentals (Part 6)
+
+## 16.3.8 Check Your Understanding — Network Attack Mitigation
+
+### Question 3
+**Which backup policy consideration is concerned with using strong passwords to protect the backups and for restoring data?**
+
+- Validation  
+- **Security**  
+- Storage  
+- Frequency  
+
+✅ **Answer:** Security
+
+### Question 4
+**This zone is used to house servers that should be accessible to outside users.**
+
+- Inside  
+- Outside  
+- **DMZ**  
+- Internet  
+
+✅ **Answer:** DMZ
+
+### Question 5
+**Which is appropriate for providing endpoint security?**
+
+- An ESA/WSA  
+- **Antivirus software**  
+- A server-based firewall  
+- A AAA server  
+
+✅ **Answer:** Antivirus software
+
+
+## 16.4 Device Security
+
+### 16.4.1 Cisco AutoSecure
+One area of networks that requires special attention to maintain security is the devices. You probably already have a password for your computer, smart phone, or tablet. Is it as strong as it could be? Are you using other tools to enhance the security of your devices? This topic tells you how.
+
+The security settings are set to the default values when a new operating system is installed on a device. In most cases, this level of security is inadequate. For Cisco routers, the Cisco **AutoSecure** feature can be used to assist securing the system, as shown in the example.
+
+```text
+Router# auto secure
+      --- AutoSecure Configuration ---
+*** AutoSecure configuration enhances the security of
+the router but it will not make router absolutely secure
+from all security attacks ***
+```
+
+In addition, there are some simple steps that should be taken that apply to most operating systems:
+- Default usernames and passwords should be changed immediately.
+- Access to system resources should be restricted to only the individuals that are authorized to use those resources.
+- All unnecessary services and applications should be turned off and uninstalled when possible.
+
+Often, devices shipped from the manufacturer have been sitting in a warehouse for a period of time and do not have the most up-to-date patches installed. It is important to update any software and install any security patches prior to implementation.
+
+
+### 16.4.2 Passwords
+To protect network devices, it is important to use strong passwords. Here are standard guidelines to follow:
+- Use a password length of at least eight characters, preferably 10 or more characters. A longer password is a more secure password.
+- Make passwords complex. Include a mix of uppercase and lowercase letters, numbers, symbols, and spaces, if allowed.
+- Avoid passwords based on repetition, common dictionary words, letter or number sequences, usernames, relative or pet names, biographical information, such as birthdays, ID numbers, ancestor names, or other easily identifiable pieces of information.
+- Deliberately misspell a password. For example, Smith = Smyth = 5myth or Security = 5ecur1ty.
+- Change passwords often. If a password is unknowingly compromised, the window of opportunity for the threat actor to use the password is limited.
+- Do not write passwords down and leave them in obvious places such as on the desk or monitor.
+
+The tables show examples of strong and weak passwords.
+
+**Weak Passwords**
+
+| Weak Password | Why it is Weak |
+|---|---|
+| `secret` | Simple dictionary password |
+| `smith` | Maiden name of mother |
+| `toyota` | Make of a car |
+| `bob1967` | Name and birthday of the user |
+| `Blueleaf23` | Simple words and numbers |
+
+**Strong Passwords**
+
+| Strong Password | Why it is Strong |
+|---|---|
+| `b67n42d39c` | Combines alphanumeric characters |
+| `12^h u4@1p7` | Combines alphanumeric characters, symbols, and includes a space |
+
+On Cisco routers, leading spaces are ignored for passwords, but spaces after the first character are not. Therefore, one method to create a strong password is to use the space bar and create a phrase made of many words. This is called a **passphrase**. A passphrase is often easier to remember than a simple password. It is also longer and harder to guess.
+
+
+### 16.4.3 Additional Password Security
+Strong passwords are only useful if they are secret. There are several steps that can be taken to help ensure that passwords remain secret on a Cisco router and switch including these:
+- Encrypting all plaintext passwords
+- Setting a minimum acceptable password length
+- Deterring brute-force password guessing attacks
+- Disabling an inactive privileged EXEC mode access after a specified amount of time.
+
+As shown in the sample configuration in the figure, the **service password-encryption** global configuration command prevents unauthorized individuals from viewing plaintext passwords in the configuration file. This command encrypts all plaintext passwords. Notice in the example, that the password “cisco” has been encrypted as “03095A0F034F”.
+
+To ensure that all configured passwords are a minimum of a specified length, use the **security passwords min-length _length_** command in global configuration mode. In the figure, any new password configured would have to have a minimum length of eight characters.
+
+Threat actors may use password cracking software to conduct a brute-force attack on a network device. This attack continuously attempts to guess the valid passwords until one works. Use the **login block-for _#_ attempts _#_ within _#_** global configuration command to deter this type of attack. In the figure for example, the **login block-for 120 attempts 3 within 60** command will block vty login attempts for 120 seconds if there are three failed login attempts within 60 seconds.
+
+Network administrators can become distracted and accidently leave a privileged EXEC mode session open on a terminal. This could enable an internal threat actor access to change or erase the device configuration.
+
+By default, Cisco routers will logout an EXEC session after 10 minutes of inactivity. However, you can reduce this setting using the **exec-timeout _minutes seconds_** line configuration command. This command can be applied on line console, auxiliary, and vty lines. In the figure, we are telling the Cisco device to automatically disconnect an inactive user on a vty line after the user has been idle for 5 minutes and 30 seconds.
+
+```text
+R1(config)# service password-encryption
+R1(config)# security passwords min-length 8
+R1(config)# login block-for 120 attempts 3 within 60
+R1(config)# line vty 0 4
+R1(config-line)# password cisco123
+R1(config-line)# exec-timeout 5 30
+R1(config-line)# transport input ssh
+R1(config-line)# end
+R1#
+R1# show running-config | section line vty
+line vty 0 4
+ password 7 094F471A1A0A
+ exec-timeout 5 30
+ login
+ transport input ssh
+R1#
+```
+
+
+### 16.4.4 Enable SSH
+Telnet simplifies remote device access, but it is not secure. Data contained within a telnet packet is transmitted unencrypted. For this reason, it is highly recommended to enable Secure Shell (SSH) on devices for secure remote access.
+
+It is possible to configure a Cisco device to support SSH using the following six steps:
+
+**Step 1.** Configure a unique device hostname. A device must have a unique hostname other than the default.  
+**Step 2.** Configure the IP domain name. Configure the IP domain name of the network by using the global configuration mode command **ip domain name _name_**.  
+**Step 3.** Generate a key to encrypt SSH traffic. SSH encrypts traffic between source and destination. However, to do so, a unique authentication key must be generated by using the global configuration command **crypto key generate rsa general-keys modulus _bits_**. The modulus bits determines the size of the key and can be configured from 360 bits to 2048 bits. The larger the bit value, the more secure the key. However, larger bit values also take longer to encrypt and decrypt information. The minimum recommended modulus length is **1024 bits**.  
+**Step 4.** Verify or create a local database entry. Create a local database username entry using the **username** global configuration command. In the example, the parameter **secret** is used so that the password will be encrypted using MD5.  
+**Step 5.** Authenticate against the local database. Use the **login local** line configuration command to authenticate the vty line against the local database.  
+**Step 6.** Enable vty inbound SSH sessions. By default, no input session is allowed on vty lines. You can specify multiple input protocols including Telnet and SSH using the **transport input {ssh | telnet}** command.
+
+As shown in the example, router R1 is configured in the **span.com** domain. This information is used along with the bit value specified in the **crypto key generate rsa general-keys modulus** command to create an encryption key.
+
+Next, a local database entry for a user named Bob is created. Finally, the vty lines are configured to authenticate against the local database and to only accept incoming SSH sessions.
+
+```text
+Router# configure terminal
+Router(config)# hostname R1
+R1(config)# ip domain name span.com
+R1(config)# crypto key generate rsa general-keys modulus 1024
+The name for the keys will be: R1.span.com % The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+Dec 13 16:19:12.079: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R1(config)#
+
+R1(config)# username Bob secret cisco
+R1(config)# line vty 0 4
+R1(config-line)# login local
+R1(config-line)# transport input ssh
+R1(config-line)# exit
+R1(config)#
+```
+
+
+### 16.4.5 Disable Unused Services
+Cisco routers and switches start with a list of active services that may or may not be required in your network. Disable any unused services to preserve system resources, such as CPU cycles and RAM, and prevent threat actors from exploiting these services. The type of services that are on by default will vary depending on the IOS version. For example, IOS-XE typically will have only HTTPS and DHCP ports open. You can verify this with the **show ip ports all** command, as shown in the example.
+
+```text
+Router# show ip ports all
+
+Proto Local Address           Foreign Address          State        PID/Program Name
+TCP
+      Local Address           Foreign Address          (state)
+tcp   :::443                  :::*                     LISTEN       309/[IOS]HTTP CORE
+tcp   :::443                  *:*                      LISTEN       309/[IOS]HTTP CORE
+udp   *:67                     0.0.0.0:0                            387/[IOS]DHCPD Receive
+
+Router#
+```
+
+IOS versions prior to IOS-XE use the **show control-plane host open-ports** command. We mention this command because you may see it on older devices. The output is similar. However, notice that this older router has an insecure HTTP server and Telnet running. Both of these services should be disabled. As shown in the example, disable HTTP with the **no ip http server** global configuration command. Disable Telnet by specifying only SSH in the line configuration command, **transport input ssh**.
+
+```text
+Router# show control-plane host open-ports
+Active internet connections (servers and established)
+Prot  Local Address   Foreign Address  Service       State
+tcp   *:23            *:0              Telnet        LISTEN
+tcp   *:80            *:0              HTTP CORE     LISTEN
+udp   *:67            *:0              DHCPD Receive LISTEN
+
+Router# configure terminal
+Router(config)# no ip http server
+Router(config)# line vty 0 15
+Router(config-line)# transport input ssh
+```
+
+---
+
+# Module 16 — Part 7: 16.4.6 to 16.5.1 (Device Security + Practice)
+
+> Covers only the items shown in your screenshots: **16.4.6**, **16.4.7**, **16.5**, and **16.5.1**.
+
+---
+
+## 16.4.6 Packet Tracer — Configure Secure Passwords and SSH
+
+### Addressing Table
+
+| Device | Interface | IP Address | Subnet Mask | Default Gateway |
+|---|---|---|---|---|
+| RTA | G0/0 | 172.16.1.1 | 255.255.255.0 | N/A |
+| PCA | NIC | 172.16.1.10 | 255.255.255.0 | 172.16.1.1 |
+| SW1 | VLAN 1 | 172.16.1.2 | 255.255.255.0 | 172.16.1.1 |
+
+### Scenario (what you’re doing)
+
+You’re asked to prep **RTA** (router) and **SW1** (switch) so they’re ready for deployment. Before connecting them to the network, you must enable baseline security (strong passwords + SSH).
+
+### Step 1 — Configure basic security on the router (RTA)
+
+1. **Configure PCA IPv4 settings** using the addressing table.
+2. From PCA, **console into RTA** (Terminal app).
+3. Set **hostname**:
+   - `hostname RTA`
+4. Configure **interface IP + enable it** (use the values from the table).
+5. **Encrypt plaintext passwords**:
+   - `service password-encryption`
+6. Enforce **minimum password length**:
+   - `security password min-length 10`
+7. Configure a **strong enable secret** (pick one you will remember).
+8. Disable DNS lookup (prevents delays when commands are mistyped):
+   - `no ip domain-lookup`
+9. Set the **domain name** *(case-sensitive in PT scoring)*:
+   - `ip domain-name CCNA.com`
+10. Create a **local user** with an encrypted secret:
+    - `username <any_user> secret <any_password>`
+11. Generate **RSA keys (1024-bit)**:
+    - `crypto key generate rsa`
+    - When asked for the modulus, enter: `1024`
+12. Enable brute-force protection:
+    - Block logins for **180 seconds** if there are **4 failures within 120 seconds**:
+      - `login block-for 180 attempts 4 within 120`
+13. Configure **VTY 0–4** for **SSH-only** + local login:
+    - `line vty 0 4`
+    - `transport input ssh`
+    - `login local`
+14. Set VTY **EXEC timeout** to **6 minutes**:
+    - `exec-timeout 6`
+15. Save to NVRAM:
+    - `copy running-config startup-config`
+16. From PCA, test SSH help and then SSH into RTA:
+    - `ssh /?`
+    - `SSH -l <username> <target>`
+
+### Step 2 — Configure basic security on the switch (SW1)
+
+1. Open **SW1 → CLI**.
+2. Set **hostname**:
+   - `hostname SW1`
+3. Configure **VLAN 1** management IP + enable it (per addressing table).
+4. Configure the **default gateway**:
+   - `ip default-gateway 172.16.1.1`
+5. **Shut down unused ports** (bulk method using *interface range*).  
+   On SW1, shut down everything except **F0/1** and **G0/1**:
+   - `interface range f0/2-24, g0/2`
+   - `shutdown`
+6. Encrypt plaintext passwords:
+   - `service password-encryption`
+7. Configure a strong **enable secret** (choose your own).
+8. Disable DNS lookup:
+   - `no ip domain-lookup`
+9. Set the **domain name** *(case-sensitive in PT scoring)*:
+   - `ip domain-name CCNA.com`
+10. Create a local user with an encrypted secret:
+    - `username <any_user> secret <any_password>`
+11. Generate **RSA keys (1024-bit)**:
+    - `crypto key generate rsa` → modulus `1024`
+12. Configure **VTY lines** for **SSH-only** + local login:
+    - `line vty 0 4`
+    - `transport input ssh`
+    - `login local`
+13. Set **EXEC timeout** to **6 minutes** on VTY lines:
+    - `exec-timeout 6`
+14. Save to NVRAM:
+    - `copy running-config startup-config`
+
+**Files (as provided):**
+- `16.4.6-packet-tracer---configure-secure-passwords-and-ssh.pka`
+- `16.4.6-packet-tracer---configure-secure-passwords-and-ssh.pdf`
+
+---
+
+## 16.4.7 Lab — Configure Network Devices with SSH
+
+### Topology + Addressing Table
+
+| Device | Interface | IP Address | Subnet Mask | Default Gateway |
+|---|---|---:|---:|---:|
+| R1 | G0/0/1 | 192.168.1.1 | 255.255.255.0 | N/A |
+| S1 | VLAN 1 | 192.168.1.11 | 255.255.255.0 | 192.168.1.1 |
+| PC-A | NIC | 192.168.1.3 | 255.255.255.0 | 192.168.1.1 |
+
+### Objectives
+
+- **Part 1:** Configure basic device settings  
+- **Part 2:** Configure the router for SSH access  
+- **Part 3:** Configure the switch for SSH access  
+- **Part 4:** SSH from the CLI on the Switch
+
+### Background / Scenario (why SSH)
+
+Telnet does not encrypt traffic, so credentials/configs can be captured. **SSH** encrypts the session and provides device authentication, so it is preferred for remote administration.
+
+### Required resources (typical)
+
+- 1 router (ex: Cisco 4221 w/ IOS XE 16.9.x or similar)
+- 1 switch (ex: Catalyst 2960 w/ IOS 15.2(2) or similar)
+- 1 Windows PC with terminal software (ex: **Tera Term**)
+- Console + Ethernet cabling
+
+---
+
+### Part 1 — Configure basic device settings
+
+#### Step 1: Cable the network
+- Cable devices as shown in the topology.
+
+#### Step 2: Initialize and reload
+- Ensure the router and switch are erased (no startup config), then reload.
+
+#### Step 3: Configure the router
+From console on **R1**:
+
+- Disable DNS lookup:
+  - `no ip domain-lookup`
+- Set privileged EXEC encrypted password to **class**
+- Set console password to **cisco** and require login
+- Set VTY password to **cisco** and require login
+- Encrypt plaintext passwords:
+  - `service password-encryption`
+- Configure a warning banner (MOTD) about unauthorized access
+- Configure and enable **G0/0/1** with `192.168.1.1/24`
+- Save configuration:
+  - `copy running-config startup-config`
+
+#### Step 4: Configure PC-A
+- Set IP/mask to match the addressing table.
+- Set the default gateway to `192.168.1.1`.
+
+#### Step 5: Verify connectivity
+- From PC-A: `ping 192.168.1.1`
+
+---
+
+### Part 2 — Configure the router for SSH access
+
+#### What SSH needs (in Packet Tracer + IOS)
+- A hostname and domain name (used when generating keys)
+- RSA keys
+- A local username/secret
+- VTY lines configured to accept SSH and authenticate with the local database
+
+#### Minimum required settings for this lab
+- Local user: `admin` / `Adm1nP@55`
+- Enable SSH on VTY lines (permit **Telnet + SSH** if the lab says so)
+- Use `login local` on the VTY lines
+- Save config
+
+#### Test SSH from PC-A
+- Use Tera Term to SSH to `192.168.1.1`
+- Login with `admin` / `Adm1nP@55`
+
+---
+
+### Part 3 — Configure the switch for SSH access
+
+#### Step 1: Basic settings on S1
+- `no ip domain-lookup`
+- Privileged EXEC password: **class**
+- Console password: **cisco** + `login`
+- VTY password: **cisco** + `login`
+- `service password-encryption`
+- MOTD banner
+- VLAN 1 SVI: `192.168.1.11/24`
+- Default gateway: `192.168.1.1`
+- Save config
+
+#### Step 2: Enable SSH on S1 (same idea as R1)
+- Set hostname + domain name
+- Generate RSA keys
+- Create local user `admin` / `Adm1nP@55`
+- Configure VTY lines for SSH (and Telnet if required) + `login local`
+
+#### Quick test
+- SSH from PC-A to `192.168.1.11`
+
+**Question (lab):** Are you able to establish an SSH session with the switch?  
+> Write your answer here.
+
+---
+
+### Part 4 — SSH from the switch CLI
+
+- View available SSH parameters:
+  - `ssh ?`
+- SSH from **S1 → R1**:
+  - `ssh -l admin 192.168.1.1`
+
+**Question (lab):** What versions of SSH are supported from the CLI?  
+> Write your answer here.
+
+**Reflection question:** How would you give multiple users (each with their own username) access to a network device?  
+> Write your answer here.
+
+**File (as provided):**
+- `16.4.7-lab---configure-network-devices-with-ssh.pdf`
+
+---
+
+## 16.5 Module Practice and Quiz
+
+This section starts the **Module Practice and Quiz** area.
+
+---
+
+## 16.5.1 Packet Tracer — Secure Network Devices
+
+### Addressing Table (fill the blanks)
+
+| Device | Interface | Address | Mask | Gateway |
+|---|---|---:|---:|---:|
+| RTR-A | G0/0/0 | 192.168.1.1 | 255.255.255.0 | N/A |
+| RTR-A | G0/0/1 | 192.168.2.1 | 255.255.255.0 | N/A |
+| SW-1 | SVI | 192.168.1.254 | 255.255.255.0 | **_____** |
+| PC | NIC | 192.168.1.2 | 255.255.255.0 | **_____** |
+| Laptop | NIC | 192.168.1.10 | 255.255.255.0 | **_____** |
+| Remote PC | NIC | 192.168.2.10 | 255.255.255.0 | **_____** |
+
+### Step 1 — Document the network
+- Complete the missing **Gateway** fields in the addressing table.
+
+### Step 2 — Router configuration requirements (RTR-A)
+
+- Disable DNS lookup.
+- Configure hostname.
+- Set minimum password length: **10**.
+- Console password (10 chars): `@Cons1234!`
+- Console + VTY idle timeout: **7 minutes**.
+- Enable secret: encrypted (allowed to match activity requirements).
+- MOTD banner warning.
+- `service password-encryption`
+- Local user: `NETadmin` / `LogAdmin!9`
+- SSH domain name: `security.com`
+- RSA modulus: `1024`
+- VTY lines: **SSH-only** + `login local`
+- Login block: **45 seconds** if **3 failures within 100 seconds**.
+
+### Step 3 — Switch configuration requirements (SW-1)
+
+- Shut down unused ports.
+- Configure SVI management + default gateway so it can be managed and reachable.
+- Enable secret: `@Cons1234!`
+- Enable SSH similarly to the router.
+- Local user: `NETadmin` / `LogAdmin!9`
+- VTY lines: **SSH-only**, using local authentication and restricted to the admin account per the activity.
+- Hosts on both LANs should successfully **ping** the switch management interface.
+
+**Files (as provided):**
+- `16.5.1-packet-tracer---secure-network-devices.pka`
+- `16.5.1-packet-tracer---secure-network-devices.pdf`
+
+
+---
+
+# Module 16 — Network Security Fundamentals
+> **This file covers only:** 16.5.2, 16.5.3, and 16.5.4 (Q1–Q6)
+
+## 16.5.2 Lab — Secure Network Devices
+### Objectives
+- Part 1: Configure basic device settings
+- Part 2: Configure basic security measures on the router
+- Part 3: Verify that your security measures have been implemented correctly
+- Part 4: Configure basic security measures on the switch
+
+### Addressing Table
+| Device | Interface | IP Address | Subnet Mask | Default Gateway |
+|---|---|---:|---:|---:|
+| R1 | G0/0/1 | 192.168.1.1 | 255.255.255.0 | N/A |
+| S1 | VLAN 1 | 192.168.1.11 | 255.255.255.0 | 192.168.1.1 |
+| PC-A | NIC | 192.168.1.3 | 255.255.255.0 | 192.168.1.1 |
+
+---
+## Part 1 — Configure Basic Device Settings
+### Step 1 — Cable the network
+- Cable the devices according to the lab topology.
+
+### Step 2 — Initialize and reload
+- Initialize and reload the router and switch (erase startup config / reload) so you start from a clean state.
+
+### Step 3 — Configure router and switch
+#### Configure PC-A
+- Set IPv4 settings on **PC-A** according to the Addressing Table.
+
+#### Configure R1 (basic configuration)
+```text
+enable
+configure terminal
+no ip domain-lookup
+hostname R1
+
+enable secret cisco
+
+line console 0
+ password cisco
+ login
+ logging synchronous
+ exit
+
+line vty 0 15
+ password cisco
+ login
+ exit
+
+banner motd $ Unauthorized access is strictly prohibited. $
+
+interface g0/0/1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+exit
+end
+copy running-config startup-config
+```
+
+#### Configure S1 (basic configuration)
+```text
+enable
+configure terminal
+hostname S1
+
+enable secret cisco
+
+line console 0
+ password cisco
+ login
+ logging synchronous
+ exit
+
+line vty 0 15
+ password cisco
+ login
+ exit
+
+banner motd $ Unauthorized access is strictly prohibited. $
+
+interface vlan 1
+ ip address 192.168.1.11 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 192.168.1.1
+end
+copy running-config startup-config
+```
+
+---
+## Part 2 — Configure Basic Security Measures on the Router
+### Step 1 — Encrypt clear-text passwords and upgrade to stronger passwords
+```text
+configure terminal
+service password-encryption
+security passwords min-length 12
+
+enable secret $cisco!PRIV*
+
+line console 0
+ password $cisco!CON*
+ login
+ exit
+
+line vty 0 15
+ password $cisco!VTY*
+ login
+ exit
+end
+copy running-config startup-config
+```
+
+### Step 2 — Configure SSH-only remote access
+Lab requirements:
+- Username: `SSHadmin`
+- Password (secret): `55HAdm!n2020`
+- Domain name: `ccna-lab.com`
+- RSA key modulus: `1024`
+
+```text
+configure terminal
+username SSHadmin secret 55HAdm!n2020
+ip domain-name ccna-lab.com
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+
+line vty 0 15
+ transport input ssh
+ login local
+ exit
+end
+copy running-config startup-config
+```
+
+### Step 3 — Console/VTY best practices
+- Disconnect users after **5 minutes** of inactivity.
+- Block vty logins for **2 minutes** if **3** failed logins happen within **1 minute**.
+
+```text
+configure terminal
+login block-for 120 attempts 3 within 60
+
+line console 0
+ exec-timeout 5 0
+ exit
+
+line vty 0 15
+ exec-timeout 5 0
+ exit
+end
+copy running-config startup-config
+```
+
+---
+## Part 3 — Verify that your security measures have been implemented correctly
+### Step 1 — Verify unused ports are administratively down
+```text
+show ip interface brief
+```
+- Any unused interfaces that are **up** should be disabled with `shutdown`.
+
+### Step 2 — Test Telnet vs SSH from PC-A
+On **PC-A**, open a terminal emulator (ex: Tera Term):
+- Confirm you can ping the devices:
+  - `ping 192.168.1.1`
+  - `ping 192.168.1.11`
+- Try Telnet to `192.168.1.1` (expected: **blocked**, because VTY allows SSH only).
+- SSH to R1 and log in using `SSHadmin`.
+
+**Login-block test (as in the lab):** Intentionally mistype the username/password and observe what happens when you fail to log in repeatedly.
+
+### Step 3 — Use `show login` during the quiet period
+From the **router console**, run:
+```text
+show login
+```
+- Observe whether the router is currently blocking logins and how many seconds remain.
+
+### Step 4 — Confirm banner and privileged access
+- After the lockout timer expires, SSH to R1 again and note what message/banner is displayed.
+- Enter privileged EXEC mode with:
+  - `enable`
+  - Password: `$cisco!PRIV*`
+- Review the final security config:
+```text
+show running-config
+```
+
+---
+## Part 4 — Configure Basic Security Measures on the Switch
+### Step 1 — Apply switch security measures
+```text
+enable
+configure terminal
+service password-encryption
+security passwords min-length 12
+
+enable secret $cisco!PRIV*
+
+line console 0
+ password $cisco!CON*
+ login
+ exit
+
+line vty 0 15
+ password $cisco!VTY*
+ login
+ exit
+
+username SSHadmin secret 55HAdm!n2020
+ip domain-name ccna-lab.com
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+
+line vty 0 15
+ transport input ssh
+ login local
+ exec-timeout 5 0
+ exit
+
+login block-for 120 attempts 3 within 60
+
+line console 0
+ exec-timeout 5 0
+ exit
+end
+copy running-config startup-config
+```
+
+### Step 2 — Verify all unused ports are disabled
+```text
+show ip interface brief
+```
+- Shut down unused ports (use `interface range` to do multiple at once).
+
+Example:
+```text
+configure terminal
+interface range fa0/1-4, fa0/7-24, gi0/1-2
+ shutdown
+end
+copy running-config startup-config
+```
+
+### Step 3 — Verify switch security works
+- SSH to the switch and intentionally mistype credentials to see if login access is blocked.
+- After the 120 seconds expire, SSH again as `SSHadmin` / `55HAdm!n2020`.
+- Confirm the banner appears and you can enter privileged EXEC mode using `$cisco!PRIV*`.
+- Run `show running-config` to confirm your settings.
+
+### Reflection Questions
+1. The password `cisco` was used for console and VTY in Part 1. When is it used *after* best-practice security measures are applied?
+   - **Answer:** It shouldn’t be used anymore (it’s replaced by the stronger line passwords and SSH/local authentication).
+
+### Router Interface Summary Table (reference)
+| Router Model | Ethernet Interface #1 | Ethernet Interface #2 | Serial Interface #1 | Serial Interface #2 |
+|---|---|---|---|---|
+| 1800 | Fast Ethernet 0/0 (F0/0) | Fast Ethernet 0/1 (F0/1) | Serial 0/0/0 (S0/0/0) | Serial 0/0/1 (S0/0/1) |
+| 1900 | Gigabit Ethernet 0/0 (G0/0) | Gigabit Ethernet 0/1 (G0/1) | Serial 0/0/0 (S0/0/0) | Serial 0/0/1 (S0/0/1) |
+| 2801 | Fast Ethernet 0/0 (F0/0) | Fast Ethernet 0/1 (F0/1) | Serial 0/0/0 (S0/0/0) | Serial 0/0/1 (S0/0/1) |
+| 2811 | Fast Ethernet 0/0 (F0/0) | Fast Ethernet 0/1 (F0/1) | Serial 0/0/0 (S0/0/0) | Serial 0/0/1 (S0/0/1) |
+| 2900 | Gigabit Ethernet 0/0 (G0/0) | Gigabit Ethernet 0/1 (G0/1) | Serial 0/0/0 (S0/0/0) | Serial 0/0/1 (S0/0/1) |
+| 4221 | Gigabit Ethernet 0/0/0 (G0/0/0) | Gigabit Ethernet 0/0/1 (G0/0/1) | Serial 0/1/0 (S0/1/0) | Serial 0/1/1 (S0/1/1) |
+| 4300 | Gigabit Ethernet 0/0/0 (G0/0/0) | Gigabit Ethernet 0/0/1 (G0/0/1) | Serial 0/1/0 (S0/1/0) | Serial 0/1/1 (S0/1/1) |
+
+---
+
+## 16.5.3 What did I learn in this module?
+### Security Threats and Vulnerabilities
+- Network attacks can lead to lost time/money and stolen or damaged information.
+- Attackers often succeed by exploiting software vulnerabilities or misconfigurations.
+- Four common threat outcomes: information theft, data loss/manipulation, identity theft, and disruption of service.
+- Three primary vulnerability categories: technological, configuration, and weak/missing security policy.
+- Physical threats commonly fall into four classes: hardware, environmental, electrical, and maintenance.
+
+### Network Attacks
+- Malware is malicious software designed to damage, disrupt, steal, or perform unauthorized actions.
+- Viruses, worms, and Trojan horses are common malware types.
+- Network attacks commonly fall into three groups:
+  - **Reconnaissance** (internet queries, ping sweeps, and port scans)
+  - **Access attacks** (password attacks/brute force, Trojans, packet sniffers, trust exploitation, port redirection, man-in-the-middle)
+  - **Denial of Service** (DoS and DDoS)
+
+### Network Attack Mitigation
+- Secure devices first (routers, switches, servers, hosts), then layer controls (defense-in-depth).
+- Common security components/services: VPN, firewall (ASA), IPS, ESA/WSA, and AAA servers.
+- Keep backups of configs and OS/IOS images (e.g., on FTP or similar) so you can restore quickly after failure.
+- Patch vulnerable systems and manage critical updates (ideally with automation).
+- AAA provides **Authentication**, **Authorization**, and **Accounting**.
+- Firewalls typically sit between networks and control traffic; public-facing servers often live in a **DMZ**.
+- Firewall methods include packet filtering, application filtering, URL filtering, and SPI.
+- Endpoint security includes policies, antivirus, and host intrusion prevention; more advanced solutions can use network access control.
+
+### Device Security
+- Default OS/device settings are often inadequate; hardening is required.
+- Cisco AutoSecure can help improve device security, but it does not guarantee complete protection.
+- Good practices include changing defaults, restricting access, disabling unnecessary services, using strong passwords/passphrases, enabling SSH, encrypting stored passwords, using lockout controls, and auto-disconnecting inactive sessions.
+
+---
+
+## 16.5.4 Module Quiz — Network Security Fundamentals (Q1–Q6)
+
+### Question 1
+Which component is designed to protect against unauthorized communications to and from a computer?
+
+- Security center
+- Port scanner
+- Antimalware
+- Antivirus
+- Firewall
+
+**Answer:** Firewall
+
+### Question 2
+Which command will block login attempts on RouterA for a period of 30 seconds if there are 2 failed login attempts within 10 seconds?
+
+- RouterA(config)# login block-for 10 attempts 2 within 30
+- RouterA(config)# login block-for 30 attempts 2 within 10
+- RouterA(config)# login block-for 30 attempts 10 within 2
+- RouterA(config)# login block-for 2 attempts 30 within 10
+
+**Answer:** RouterA(config)# login block-for 30 attempts 2 within 10
+
+### Question 3
+What is the purpose of the network security accounting function?
+
+- To keep track of the actions of a user
+- To determine which resources a user can access
+- To require users to prove who they are
+- To provide challenge and response questions
+
+**Answer:** To keep track of the actions of a user
+
+### Question 4
+What type of attack may involve the use of tools such as nslookup and fping?
+
+- Denial of service attack
+- Access attack
+- Worm attack
+- Reconnaissance attack
+
+**Answer:** Reconnaissance attack
+
+### Question 5
+Which benefit does SSH offer over Telnet for remotely managing a router?
+
+- TCP usage
+- Connections via multiple VTY lines
+- Encryption
+- Authorization
+
+**Answer:** Encryption
+
+### Question 6
+What is one of the most effective security tools available for protecting users from external threats?
+
+- Firewalls
+- Router that run AAA services
+- Patch servers
+- Password encryption techniques
+
+**Answer:** Firewalls
+
+---
+# 16.5.4 Module Quiz — Network Security Fundamentals (Q6–Q15)
+
+> Extracted from your screenshots (Result Page view).  
+> Format: question + choices + **correct answer**.
+
+---
+
+## Question 6
+**What is one of the most effective security tools available for protecting users from external threats?**
+
+- Router that run AAA services  
+- Patch servers  
+- Password encryption techniques  
+- **Firewalls** ✅
+
+**Answer:** Firewalls
+
+---
+
+## Question 7
+**Which type of network threat is intended to prevent authorized users from accessing resources?**
+
+- Access attacks  
+- Reconnaissance attacks  
+- Trust exploitation  
+- **DoS attacks** ✅
+
+**Answer:** DoS attacks
+
+---
+
+## Question 8
+**Which three services are provided by the AAA framework? (Choose three.)**
+
+- Automation  
+- Autobalancing  
+- **Accounting** ✅  
+- **Authorization** ✅  
+- **Authentication** ✅  
+
+**Answer:** Authentication, Authorization, Accounting
+
+---
+
+## Question 9
+**Which malicious code attack is self-contained and tries to exploit a specific vulnerability in a system being attacked?**
+
+- Virus  
+- **Worm** ✅  
+- Trojan horse  
+- Social engineering  
+
+**Answer:** Worm
+
+---
+
+## Question 10
+**Some routers and switches in a wiring closet malfunctioned after an air conditioning unit failed. What type of threat does this situation describe?**
+
+- Configuration  
+- **Environmental** ✅  
+- Electrical 
+- Maintenance  
+
+**Answer:** Environmental
+
+---
+
+## Question 11
+**What does the term vulnerability mean?**
+
+- A computer that contains sensitive information  
+- A method of attack to exploit a target  
+- A known target or victim machine  
+- A potential threat that a hacker creates  
+- **A weakness that makes a target susceptible to an attack** ✅
+
+**Answer:** A weakness that makes a target susceptible to an attack
+
+---
+
+## Question 12
+**What three configuration steps must be performed to implement SSH access to a router? (Choose three.)**
+
+- A password on the console line 
+- **An IP domain name** ✅  
+- **A user account** ✅  
+- An enable mode password  
+- **A unique hostname** ✅  
+
+**Answer:** A unique hostname, an IP domain name, and a user account
+
+---
+
+## Question 13
+**What is the objective of a network reconnaissance attack?**
+
+- Unauthorized manipulation of data  
+- Disabling network systems or services  
+- Denying access to resources by legitimate users  
+- **Discovery and mapping of systems** ✅
+
+**Answer:** Discovery and mapping of systems
+
+---
+
+## Question 14
+**For security reasons a network administrator needs to ensure that local computers cannot ping each other. Which settings can accomplish this task?**
+
+- Smartcard settings  
+- **Firewall settings** ✅  
+- MAC address settings  
+- File system settings  
+
+**Answer:** Firewall settings
+
+---
+
+## Question 15
+**A network administrator establishes a connection to a switch via SSH. What characteristic uniquely describes the SSH connection?**
+
+- Out-of-band access to a switch through the use of a virtual terminal with password authentication  
+- Remote access to the switch through the use of a telephone dialup connection  
+- On-site access to a switch through the use of a directly connected PC and a console cable  
+- **Remote access to a switch where data is encrypted during the session** ✅  
+- Direct access to the switch through the use of a terminal emulation program  
+
+**Answer:** Remote access to a switch where data is encrypted during the session
+
+
+---
